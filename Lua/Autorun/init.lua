@@ -15,11 +15,11 @@ if Traitormod.Extras.NeurotraumaEnabled then
     table.insert(Traitormod.Config.PointShopConfig.ItemCategories, dofile(Traitormod.Extras.Path .. "/Lua/pointshop/neurotrauma.lua"))
 end
 
-local function GetCargoPosition()
+local function GetMedicalSpawnPosition()
     local position = Submarine.MainSub.WorldPosition
 
     for key, value in pairs(Submarine.MainSub.GetWaypoints(true)) do
-        if value.SpawnType == SpawnType.Cargo then
+        if value.AssignedJob and value.AssignedJob.Identifier == "medicaldoctor" then
             position = value.WorldPosition
             break
         end
@@ -31,7 +31,7 @@ end
 Hook.Add("roundStart", "Traitormod.Extras.RoundStart", function ()
     if Traitormod.Extras.NeurotraumaEnabled then
         for i = 1, 5, 1 do
-            Entity.Spawner.AddItemToSpawnQueue(ItemPrefab.GetItemPrefab("medstartercrate"), GetCargoPosition())
+            Entity.Spawner.AddItemToSpawnQueue(ItemPrefab.GetItemPrefab("medstartercrate"), GetMedicalSpawnPosition())
         end
     end
 end)
